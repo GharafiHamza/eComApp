@@ -3,6 +3,7 @@ package com.eCommerce.eComApp.security;
 import com.eCommerce.eComApp.exceptions.NotFoundException;
 import com.eCommerce.eComApp.model.Admin;
 import com.eCommerce.eComApp.service.AdminService;
+import com.google.common.collect.ImmutableList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,12 +12,14 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
-//import com.google.common.collect.ImmutableList;
 
 @Configuration
 @EnableWebSecurity
@@ -28,7 +31,7 @@ public class AppSecurityConfiguration  extends WebSecurityConfigurerAdapter {
     UserPrincipalDetailsService service;
 
     @Autowired
-    public void AppSecurityConfig(UserPrincipalDetailsService service) {
+    public AppSecurityConfiguration(UserPrincipalDetailsService service) {
 
         this.service = service;
     }
@@ -56,37 +59,37 @@ public class AppSecurityConfiguration  extends WebSecurityConfigurerAdapter {
     {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(service);
-        provider.setPasswordEncoder(new BCryptPasswordEncoder());
+        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
 
         return provider;
     }
 
 
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        final CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOrigins(ImmutableList.of("*"));
-//        configuration.setAllowedMethods(ImmutableList.of("HEAD",
-//                "GET", "POST", "PUT", "DELETE", "PATCH"));
-//        configuration.setAllowedHeaders(ImmutableList.of("accept",
-//                "accept-encoding",
-//                "authorization",
-//                "content-type",
-//                "dnt",
-//                "origin",
-//                "user-agent",
-//                "x-csrftoken",
-//                "x-requested-with"));
-//        // setAllowCredentials(true) is important, otherwise:
-//        // The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'.
-//        configuration.setAllowCredentials(true);
-//        // setAllowedHeaders is important! Without it, OPTIONS preflight request
-//        // will fail with 403 Invalid CORS request
-//        configuration.setAllowedHeaders(ImmutableList.of("Authorization", "Cache-Control", "Content-Type"));
-//        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        final CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(ImmutableList.of("*"));
+        configuration.setAllowedMethods(ImmutableList.of("HEAD",
+                "GET", "POST", "PUT", "DELETE", "PATCH"));
+        configuration.setAllowedHeaders(ImmutableList.of("accept",
+                "accept-encoding",
+                "authorization",
+                "content-type",
+                "dnt",
+                "origin",
+                "user-agent",
+                "x-csrftoken",
+                "x-requested-with"));
+        // setAllowCredentials(true) is important, otherwise:
+        // The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'.
+        configuration.setAllowCredentials(true);
+        // setAllowedHeaders is important! Without it, OPTIONS preflight request
+        // will fail with 403 Invalid CORS request
+        configuration.setAllowedHeaders(ImmutableList.of("Authorization", "Cache-Control", "Content-Type"));
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 
 
 
@@ -104,7 +107,7 @@ public class AppSecurityConfiguration  extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT,"/admin/{id}").hasRole("Admin")	//modifier un admin
                 .antMatchers(HttpMethod.DELETE,"/admin/{id}").hasRole("Admin")	//supprimer un admin
 
-                //CLIENT
+                //MARCHAND
                 .antMatchers(HttpMethod.POST,"/marchands").hasRole("Admin")		//creer marchand
                 .antMatchers(HttpMethod.PUT,"/marchand/{id}").hasRole("Admin")	//modifier marchand
                 .antMatchers(HttpMethod.DELETE,"/marchand/{id}").hasRole("Marchand")	//supprimer marchand
