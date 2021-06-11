@@ -8,7 +8,10 @@ import java.util.List;
 
 public @Data class Client extends User{
 
-    private List<String> shippingAddress;
+    private List<ShippingAddress> shippingAddress;
     private List<CreditCard> creditCard;
+    private List<Item> favourites;
+    private List<Item> shoppingCart;
+
 
 }

@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RestController
+@RequestMapping("/")
 public class CategorieController {
     @Autowired
     CategorieService categorieService;
@@ -24,7 +26,7 @@ public class CategorieController {
         return new ResponseEntity<Categorie>(categorieService.getCategorieById(id),HttpStatus.OK);
     }
 
-    @PostMapping("/categories")
+    @PostMapping("/addcategories")
     public void addcategorie(@RequestBody Categorie categorie){
         categorieService.addCategorie(categorie);
     }

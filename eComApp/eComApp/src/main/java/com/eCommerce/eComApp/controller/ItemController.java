@@ -32,6 +32,12 @@ public class ItemController {
         itemService.addItem(item);
     }
 
+    @PostMapping("/items/{cat}")
+    public void addItemWithCategorie(@RequestBody Item item,@PathVariable String cat){
+
+        itemService.addItemWC(item, cat);
+    }
+
     @PutMapping("/items/{id}")
     public void updateItem(@PathVariable String id, @RequestBody Item item){
         item.setId(id);
@@ -41,6 +47,11 @@ public class ItemController {
     @DeleteMapping("/items/{id}")
     public void deleteItem(@PathVariable String id){
         itemService.deleteItem(id);
+    }
+
+    @GetMapping("/itemsByCategorie/{categorie}")
+    public List<Item> getItemsByCategorie(@PathVariable String categorie){
+        return itemService.getItemByCategorie(categorie);
     }
 
 }

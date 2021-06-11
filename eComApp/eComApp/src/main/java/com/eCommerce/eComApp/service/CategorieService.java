@@ -7,10 +7,12 @@ import com.eCommerce.eComApp.model.Item;
 import com.eCommerce.eComApp.repository.CategorieRepository;
 import com.eCommerce.eComApp.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class CategorieService {
     @Autowired
     CategorieRepository categorieRepository;
@@ -38,9 +40,10 @@ public class CategorieService {
 
     public void addCategorie(Categorie categorie){
         Categorie oldCategorie= categorieRepository.findByName(categorie.getName());
-        if(categorie != null){
+        if(oldCategorie != null){
             throw new AlreadyExistsException("There is a categorie with the same name :"+categorie.getName());
-        }else categorieRepository.save(categorie);
+        }
+        else categorieRepository.save(categorie);
     }
 
     public void addItem(String id, Item item){

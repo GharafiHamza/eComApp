@@ -1,6 +1,7 @@
 package com.eCommerce.eComApp.service;
 
 import com.eCommerce.eComApp.exceptions.NotFoundException;
+import com.eCommerce.eComApp.model.Categorie;
 import com.eCommerce.eComApp.model.Item;
 import com.eCommerce.eComApp.repository.CategorieRepository;
 import com.eCommerce.eComApp.repository.ItemRepository;
@@ -26,6 +27,14 @@ public class ItemService {
         }else {
             throw new NotFoundException("No item was Found");
         }
+    }
+
+    public void addItemWC(Item item, String cat){
+        Categorie catt = categorieRepository.findByName(cat);
+        System.out.println(catt.getDescription());
+        Item toAdd = item;
+        toAdd.setCategorie(catt);
+        itemRepository.save(toAdd);
     }
 
     public Item getItemById(String id){
